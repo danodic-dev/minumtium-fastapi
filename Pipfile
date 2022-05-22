@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pydantic = "*"
+fastapi = "*"
+uvicorn = "*"
+pg8000 = "*"
+minumtium = "*"
+minumtium-sqlite = "*"
+minumtium-postgres = "*"
+minumtium-simple-jwt-auth = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-asyncio = "*"
+autopep8 = "*"
+twine = "*"
+build = "*"
+pytest-cov = "*"
+coverage = "*"
+
+[requires]
+python_version = "3"

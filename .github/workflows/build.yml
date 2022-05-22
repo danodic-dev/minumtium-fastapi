@@ -1,0 +1,50 @@
+name: unit tests & static code analysis
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ '3.6', '3.7', '3.8', '3.9']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pipenv'
+      - name: Install pipenv
+        run: pipx install pipenv
+      - name: Setup Environment
+        run: pipenv install --dev
+      - name: Unit Tests
+        run: pipenv run python -m pytest ./tests/
+  test_and_scan:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+          cache: 'pipenv'
+      - name: Install pipenv
+        run: pipx install pipenv
+      - name: Setup Environment
+        run: pipenv install --dev
+      - name: Unit Tests
+        run: pipenv run python -m pytest ./tests/ --cov=tests/ --cov-report xml:coverage.xml
+      - name: Coverage Report
+        run: pipenv run python -m coverage xml -i
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
