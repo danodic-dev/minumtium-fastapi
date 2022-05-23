@@ -11,11 +11,11 @@ from minumtium_fastapi import get_minumtium_fastapi
 @pytest.fixture(scope='function')
 def postgres_config() -> MinumtiumPostgresAdapterConfig:
     return MinumtiumPostgresAdapterConfig(username='minumtium',
-                                          password='samplepassword',
+                                          password='minumtium',
                                           host='127.0.0.1',
                                           port=5432,
                                           dbname='minumtium',
-                                          schema_name='minumtium')
+                                          schema_name='public')
 
 
 @pytest.fixture(scope='function')
@@ -33,8 +33,8 @@ def postgres_users_adapter(postgres_config: MinumtiumPostgresAdapterConfig):
 
 
 @pytest.fixture(scope='function')
-def postgres_client(postgres_posts_adapter: MinumtiumPostgresAdapterConfig,
-                    postgres_users_adapter: MinumtiumPostgresAdapterConfig,
+def postgres_client(postgres_posts_adapter: MinumtiumPostgresAdapter,
+                    postgres_users_adapter: MinumtiumPostgresAdapter,
                     posts_database_data: List[Dict]):
     postgres_posts_adapter.truncate()
     for post in posts_database_data:
