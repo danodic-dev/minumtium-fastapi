@@ -1,13 +1,18 @@
 name: unit tests & static code analysis
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    types: [ opened, synchronize, reopened ]
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14.2
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: minumtium
+          POSTGRES_PASSWORD: minumtium
+          POSTGRES_DB: minumtium
     strategy:
       matrix:
         python-version: [ '3.6', '3.7', '3.8', '3.9']
@@ -27,6 +32,15 @@ jobs:
     needs:
       - test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14.2
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: minumtium
+          POSTGRES_PASSWORD: minumtium
+          POSTGRES_DB: minumtium
     steps:
       - uses: actions/checkout@v2
         with:
@@ -40,9 +54,9 @@ jobs:
       - name: Setup Environment
         run: pipenv install --dev
       - name: Unit Tests
-        run: pipenv run python -m pytest ./tests/ --cov=tests/ --cov-report xml:coverage.xml
-      - name: Coverage Report
-        run: pipenv run python -m coverage xml -i
+        run: pipenv run python -m pytest ./tests/unit
+      - name: Integrated Tests
+        run: pipenv run python -m pytest ./tests/integrated
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

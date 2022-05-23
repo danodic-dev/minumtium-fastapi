@@ -1,7 +1,7 @@
 from fastapi import Header, Depends, HTTPException
 from minumtium.infra.authentication import AuthenticationService, AuthenticationException
 
-from minumtium_fastapi.deps import auth_service
+from .deps import auth_service
 
 
 async def authenticate(x_auth_minumtium: str = Header(None), service: AuthenticationService = Depends(auth_service)):

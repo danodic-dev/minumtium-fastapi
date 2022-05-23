@@ -4,6 +4,7 @@ import pytest
 from fastapi.testclient import TestClient
 from minumtium_postgres import MinumtiumPostgresAdapter, MinumtiumPostgresAdapterConfig
 from minumtium_sqlite import MinumtiumSQLiteAdapterConfig, MinumtiumSQLiteAdapter
+from sqlalchemy import text
 
 from minumtium_fastapi import get_minumtium_fastapi
 
@@ -11,11 +12,11 @@ from minumtium_fastapi import get_minumtium_fastapi
 @pytest.fixture(scope='function')
 def postgres_config() -> MinumtiumPostgresAdapterConfig:
     return MinumtiumPostgresAdapterConfig(username='minumtium',
-                                          password='samplepassword',
+                                          password='minumtium',
                                           host='127.0.0.1',
                                           port=5432,
                                           dbname='minumtium',
-                                          schema_name='minumtium')
+                                          schema_name='public')
 
 
 @pytest.fixture(scope='function')
@@ -33,12 +34,15 @@ def postgres_users_adapter(postgres_config: MinumtiumPostgresAdapterConfig):
 
 
 @pytest.fixture(scope='function')
-def postgres_client(postgres_posts_adapter: MinumtiumPostgresAdapterConfig,
-                    postgres_users_adapter: MinumtiumPostgresAdapterConfig,
+def postgres_client(postgres_posts_adapter: MinumtiumPostgresAdapter,
+                    postgres_users_adapter: MinumtiumPostgresAdapter,
                     posts_database_data: List[Dict]):
     postgres_posts_adapter.truncate()
     for post in posts_database_data:
         postgres_posts_adapter.insert(post)
+
+    with postgres_posts_adapter.engine.connect() as connection:
+        connection.execute(text('ALTER SEQUENCE public.posts_id_seq RESTART 20;'))
 
     minumtium = get_minumtium_fastapi(database_adapter_posts=postgres_posts_adapter,
                                       database_adapter_users=postgres_users_adapter)

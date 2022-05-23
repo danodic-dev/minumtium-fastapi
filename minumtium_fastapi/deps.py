@@ -54,12 +54,13 @@ async def user_repo(adapter: DatabaseAdapter = Depends(database_adapter_users)):
     return context[user_repo]
 
 
-async def auth_adapter(repo: UserRepository = Depends(user_repo)):
+async def auth_adapter(adapter: DatabaseAdapter = Depends(database_adapter_users)):
     if auth_adapter not in context:
-        from minumtium_simple_jwt_auth import SimpleJwtAuthentication
-        context[auth_adapter] = SimpleJwtAuthentication({'jwt_key': 'not a reliable key, change that quickly',
-                                                         'session_duration_hours': 1}, repo)
-    return context[auth_adapter]
+        from minumtium_simple_jwt_auth import MinumtiumSimpleJwtAuthentication, MinumtiumSimpleJwtAuthenticationConfig
+        config = MinumtiumSimpleJwtAuthenticationConfig(jwt_key='not a reliable key, change that quickly',
+                                                        session_duration_hours=1)
+        context[auth_adapter] = MinumtiumSimpleJwtAuthentication(config, adapter)
+        return context[auth_adapter]
 
 
 async def auth_service(adapter: AuthenticationAdapter = Depends(auth_adapter)):
