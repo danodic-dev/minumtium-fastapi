@@ -1,7 +1,6 @@
 import pytest
 from starlette.testclient import TestClient
 
-import deps
 from minumtium_fastapi import get_minumtium_fastapi
 from minumtium_fastapi.auth import authenticate
 from minumtium_fastapi.deps import database_adapter_users
