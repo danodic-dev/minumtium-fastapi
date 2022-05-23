@@ -6,6 +6,15 @@ on:
 jobs:
   test_and_scan:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14.2
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: minumtium
+          POSTGRES_PASSWORD: minumtium
+          POSTGRES_DB: minumtium
     steps:
       - uses: actions/checkout@v2
         with:
@@ -19,7 +28,9 @@ jobs:
       - name: Setup Environment
         run: pipenv install --dev
       - name: Unit Tests
-        run: pipenv run python -m pytest ./tests/
+        run: pipenv run python -m pytest ./tests/unit
+      - name: Integrated Tests
+        run: pipenv run python -m pytest ./tests/integrated
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
