@@ -1,10 +1,6 @@
 name: unit tests & static code analysis
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    types: [ opened, synchronize, reopened ]
 jobs:
   test:
     runs-on: ubuntu-latest
