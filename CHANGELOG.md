@@ -7,6 +7,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.1] - 2022-05-26
+
+### Fixed
+
+- Error in dependency injection was causing a null issue using the authentication adapter.
+
 ## [1.0.0] - 2022-04-14
 
 ### Added
