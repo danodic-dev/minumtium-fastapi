@@ -1,7 +1,5 @@
-## minumtium-fastapi 1.0.0
+## minumtium-fastapi 1.0.1
 
-### Added
+### Fixed
 
-- Added posts routes.
-- Added users routes.
-- Added auth routes.
+- Error in dependency injection was causing a null issue using the authentication adapter.
