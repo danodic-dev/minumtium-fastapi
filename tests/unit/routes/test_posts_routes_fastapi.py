@@ -104,6 +104,6 @@ def client(posts_database_adapter, mock_authentication) -> TestClient:
     di_context.database_adapter_posts = posts_database_adapter
     di_context.authenticate = mock_authentication
 
-    minumtium = get_minumtium_fastapi()
+    minumtium = get_minumtium_fastapi(di_context=di_context)
     client = TestClient(minumtium)
     return client
