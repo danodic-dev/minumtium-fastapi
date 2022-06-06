@@ -99,9 +99,8 @@ def test_add_post_is_authenticated(client):
 
 @pytest.fixture()
 def client(posts_database_adapter, mock_authentication) -> TestClient:
-    di_context = DependencyContainer()
-    di_context.database_adapter_posts = posts_database_adapter
-    di_context.authenticate = mock_authentication
+    di_context = DependencyContainer(database_adapter_posts=posts_database_adapter,
+                                     authentication_function=mock_authentication)
 
     minumtium = get_minumtium_fastapi(di_context=di_context)
     client = TestClient(minumtium)

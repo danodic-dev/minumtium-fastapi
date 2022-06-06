@@ -22,7 +22,7 @@ def get_auth_router(context: DependencyContainer) -> APIRouter:
         tags=['auth']
     )
 
-    service = context.auth_service
+    service: AuthenticationService = context.auth_service
 
     @auth_router.post('/login', response_model=AuthResponse)
     async def login(login_data: AuthRequest):

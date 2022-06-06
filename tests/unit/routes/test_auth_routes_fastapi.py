@@ -49,8 +49,7 @@ def test_login_max_attempts(client):
 
 @pytest.fixture()
 def client(users_database_adapter) -> TestClient:
-    di_context = DependencyContainer()
-    di_context.database_adapter_users = users_database_adapter
+    di_context = DependencyContainer(database_adapter_users=users_database_adapter)
 
     minumtium = get_minumtium_fastapi(di_context=di_context)
     client = TestClient(minumtium)

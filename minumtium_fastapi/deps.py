@@ -11,7 +11,8 @@ class DependencyContainer:
     def __init__(self,
                  database_adapter_posts: DatabaseAdapter = None,
                  database_adapter_users: DatabaseAdapter = None,
-                 authentication_adapter: AuthenticationAdapter = None):
+                 authentication_adapter: AuthenticationAdapter = None,
+                 authentication_function=None):
 
         self.database_adapter_posts = database_adapter_posts
         if not self.database_adapter_posts:
@@ -33,7 +34,9 @@ class DependencyContainer:
         self.auth_service = AuthenticationService(self.authentication_adapter)
         self.idm_service = IdmService(self.authentication_adapter, self.users_repository)
 
-        self.authenticate = setup_authenticate_dependency(self.auth_service)
+        self.authenticate = authentication_function
+        if self.authenticate is None:
+            self.authenticate = setup_authenticate_dependency(self.auth_service)
 
     @staticmethod
     def __instantiate_database_adapter(table_name: str):

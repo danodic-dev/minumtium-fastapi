@@ -91,9 +91,8 @@ def test_delete_user_empty(client):
 
 @pytest.fixture()
 def client(users_database_adapter, mock_authentication) -> TestClient:
-    di_context = DependencyContainer()
-    di_context.database_adapter_users = users_database_adapter
-    di_context.authenticate = mock_authentication
+    di_context = DependencyContainer(database_adapter_users=users_database_adapter,
+                                     authentication_function=mock_authentication)
 
     minumtium = get_minumtium_fastapi(di_context=di_context)
     client = TestClient(minumtium)

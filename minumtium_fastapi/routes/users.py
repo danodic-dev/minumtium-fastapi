@@ -34,11 +34,11 @@ def get_users_router(context: DependencyContainer):
         tags=['users']
     )
 
-    idm_service = context.idm_service
+    service = context.idm_service
     authenticate = context.authenticate
 
     @users_router.get('/', response_model=ListUsersResponse, status_code=200, dependencies=[Depends(authenticate)])
-    async def list_users(service: IdmService = Depends(idm_service)):
+    async def list_users():
         try:
             users = service.get_all_users_list()
             return ListUsersResponse(users=users)
@@ -46,7 +46,7 @@ def get_users_router(context: DependencyContainer):
             raise HTTPException(status_code=500, detail=str(e))
 
     @users_router.put('/', response_model=AddUserResponse, status_code=201, dependencies=[Depends(authenticate)])
-    async def put_user(request: AddUserRequest, service: IdmService = Depends(idm_service)):
+    async def put_user(request: AddUserRequest):
         try:
             updated = service.put_user(request.username, request.password)
             return AddUserResponse(username=request.username, updated=updated)
@@ -57,7 +57,7 @@ def get_users_router(context: DependencyContainer):
 
     @users_router.delete('/{username}', response_model=DeleteUserResponse, status_code=200,
                          dependencies=[Depends(authenticate)])
-    async def delete_user(username: str, service: IdmService = Depends(idm_service)):
+    async def delete_user(username: str):
         try:
             service.delete_user(username)
             return DeleteUserResponse(username=username)
