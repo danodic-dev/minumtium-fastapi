@@ -5,8 +5,7 @@ from fastapi.testclient import TestClient
 from minumtium.modules.posts import Post
 
 from minumtium_fastapi import get_minumtium_fastapi
-from minumtium_fastapi.auth import authenticate
-from minumtium_fastapi.deps import database_adapter_posts, DependencyContainer
+from minumtium_fastapi.deps import DependencyContainer
 
 
 def test_get_post(client):

@@ -3,7 +3,7 @@ from minumtium.modules.idm import MAX_LOGIN_TRIALS
 from starlette.testclient import TestClient
 
 from minumtium_fastapi import get_minumtium_fastapi
-from minumtium_fastapi.deps import database_adapter_users, DependencyContainer
+from minumtium_fastapi.deps import DependencyContainer
 
 
 def test_login(client):

@@ -2,8 +2,7 @@ import pytest
 from starlette.testclient import TestClient
 
 from minumtium_fastapi import get_minumtium_fastapi
-from minumtium_fastapi.auth import authenticate
-from minumtium_fastapi.deps import database_adapter_users, DependencyContainer
+from minumtium_fastapi.deps import DependencyContainer
 
 
 def test_list_users_is_authenticated(client):
