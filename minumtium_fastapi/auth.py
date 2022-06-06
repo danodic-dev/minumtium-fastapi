@@ -1,16 +1,17 @@
-from fastapi import Header, Depends, HTTPException
+from fastapi import Header, HTTPException
 from minumtium.infra.authentication import AuthenticationService, AuthenticationException
 
-from .deps import auth_service
 
+def setup_authenticate_dependency(service: AuthenticationService):
+    async def authenticate(x_auth_minumtium: str = Header(None)):
+        if x_auth_minumtium is None:
+            raise NoTokenProvidedException()
+        try:
+            service.validate_token(x_auth_minumtium)
+        except AuthenticationException as e:
+            raise NotAuthorizedException() from e
 
-async def authenticate(x_auth_minumtium: str = Header(None), service: AuthenticationService = Depends(auth_service)):
-    if x_auth_minumtium is None:
-        raise NoTokenProvidedException()
-    try:
-        service.validate_token(x_auth_minumtium)
-    except AuthenticationException as e:
-        raise NotAuthorizedException() from e
+    return authenticate
 
 
 class NoTokenProvidedException(HTTPException):

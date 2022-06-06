@@ -6,7 +6,7 @@ from minumtium.modules.posts import Post
 
 from minumtium_fastapi import get_minumtium_fastapi
 from minumtium_fastapi.auth import authenticate
-from minumtium_fastapi.deps import database_adapter_posts
+from minumtium_fastapi.deps import database_adapter_posts, DependencyContainer
 
 
 def test_get_post(client):
@@ -100,11 +100,10 @@ def test_add_post_is_authenticated(client):
 
 @pytest.fixture()
 def client(posts_database_adapter, mock_authentication) -> TestClient:
-    async def override_adapter():
-        return posts_database_adapter
+    di_context = DependencyContainer()
+    di_context.database_adapter_posts = posts_database_adapter
+    di_context.authenticate = mock_authentication
 
     minumtium = get_minumtium_fastapi()
     client = TestClient(minumtium)
-    minumtium.dependency_overrides[database_adapter_posts] = override_adapter
-    minumtium.dependency_overrides[authenticate] = mock_authentication
     return client

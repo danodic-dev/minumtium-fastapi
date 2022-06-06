@@ -4,12 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from minumtium.infra.authentication import AuthenticationService, AuthenticationException
 from pydantic import BaseModel
 
-from ..deps import auth_service
-
-auth_router = APIRouter(
-    prefix='/auth',
-    tags=['auth']
-)
+from deps import DependencyContainer
 
 
 class AuthRequest(BaseModel):
@@ -21,10 +16,20 @@ class AuthResponse(BaseModel):
     token: str
 
 
-@auth_router.post('/login', response_model=AuthResponse)
-async def login(login_data: AuthRequest, service: AuthenticationService = Depends(auth_service)):
-    try:
-        token = service.authenticate(login_data.username, login_data.password)
-        return AuthResponse(token=token)
-    except AuthenticationException as e:
-        raise HTTPException(status_code=401, detail=str(e))
+def get_auth_router(context: DependencyContainer) -> APIRouter:
+    auth_router = APIRouter(
+        prefix='/auth',
+        tags=['auth']
+    )
+
+    service = context.auth_service
+
+    @auth_router.post('/login', response_model=AuthResponse)
+    async def login(login_data: AuthRequest):
+        try:
+            token = service.authenticate(login_data.username, login_data.password)
+            return AuthResponse(token=token)
+        except AuthenticationException as e:
+            raise HTTPException(status_code=401, detail=str(e))
+
+    return auth_router

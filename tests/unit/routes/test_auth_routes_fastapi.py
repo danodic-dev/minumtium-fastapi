@@ -3,7 +3,7 @@ from minumtium.modules.idm import MAX_LOGIN_TRIALS
 from starlette.testclient import TestClient
 
 from minumtium_fastapi import get_minumtium_fastapi
-from minumtium_fastapi.deps import database_adapter_users
+from minumtium_fastapi.deps import database_adapter_users, DependencyContainer
 
 
 def test_login(client):
@@ -49,10 +49,9 @@ def test_login_max_attempts(client):
 
 @pytest.fixture()
 def client(users_database_adapter) -> TestClient:
-    async def override_adapter():
-        return users_database_adapter
+    di_context = DependencyContainer()
+    di_context.database_adapter_users = users_database_adapter
 
-    minumtium = get_minumtium_fastapi()
+    minumtium = get_minumtium_fastapi(di_context=di_context)
     client = TestClient(minumtium)
-    minumtium.dependency_overrides[database_adapter_users] = override_adapter
     return client
