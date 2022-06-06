@@ -3,7 +3,7 @@ from minumtium.infra.database import DatabaseAdapter
 from minumtium.modules.idm import UserRepository, IdmService
 from minumtium.modules.posts import PostRepository, PostService
 
-from auth import setup_authenticate_dependency
+from .auth import setup_authenticate_dependency
 
 
 class DependencyContainer:

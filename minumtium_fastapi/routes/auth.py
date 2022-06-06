@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from minumtium.infra.authentication import AuthenticationService, AuthenticationException
 from pydantic import BaseModel
 
-from deps import DependencyContainer
+from ..deps import DependencyContainer
 
 
 class AuthRequest(BaseModel):

@@ -1,10 +1,10 @@
 from minumtium.infra.authentication import AuthenticationAdapter
 from minumtium.infra.database import DatabaseAdapter
 
-from deps import DependencyContainer
-from routes.auth import get_auth_router
-from routes.posts import get_posts_router
-from routes.users import get_users_router
+from minumtium_fastapi.deps import DependencyContainer
+from minumtium_fastapi.routes.auth import get_auth_router
+from minumtium_fastapi.routes.posts import get_posts_router
+from minumtium_fastapi.routes.users import get_users_router
 
 
 def get_minumtium_fastapi(database_adapter_posts: DatabaseAdapter = None,

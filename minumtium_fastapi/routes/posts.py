@@ -6,8 +6,7 @@ from minumtium.modules.posts import (PostNotFoundException,
                                      Post, NoPostsException)
 from pydantic import BaseModel
 
-from deps import DependencyContainer
-from ..auth import authenticate, setup_authenticate_dependency
+from ..deps import DependencyContainer
 
 
 class GetPostsResponse(BaseModel):

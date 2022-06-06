@@ -7,8 +7,7 @@ from minumtium.modules.idm import (IdmService,
                                    UserDoesNotExistException)
 from pydantic import BaseModel
 
-from auth import setup_authenticate_dependency
-from deps import DependencyContainer
+from ..deps import DependencyContainer
 
 
 class ListUsersResponse(BaseModel):
