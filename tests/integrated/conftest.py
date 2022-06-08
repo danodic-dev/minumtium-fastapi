@@ -77,4 +77,4 @@ def sqlite_client(sqlite_posts_adapter, sqlite_users_adapter):
 
 @pytest.fixture(scope='function')
 def clients(sqlite_client, postgres_client):
-    return [sqlite_client, postgres_client]
+    return [postgres_client]

@@ -2,8 +2,7 @@ import pytest
 from starlette.testclient import TestClient
 
 from minumtium_fastapi import get_minumtium_fastapi
-from minumtium_fastapi.auth import authenticate
-from minumtium_fastapi.deps import database_adapter_users
+from minumtium_fastapi.deps import DependencyContainer
 
 
 def test_list_users_is_authenticated(client):
@@ -92,11 +91,9 @@ def test_delete_user_empty(client):
 
 @pytest.fixture()
 def client(users_database_adapter, mock_authentication) -> TestClient:
-    async def override_adapter():
-        return users_database_adapter
+    di_context = DependencyContainer(database_adapter_users=users_database_adapter,
+                                     authentication_function=mock_authentication)
 
-    minumtium = get_minumtium_fastapi()
+    minumtium = get_minumtium_fastapi(di_context=di_context)
     client = TestClient(minumtium)
-    minumtium.dependency_overrides[database_adapter_users] = override_adapter
-    minumtium.dependency_overrides[authenticate] = mock_authentication
     return client
