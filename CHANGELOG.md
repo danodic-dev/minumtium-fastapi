@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] - 2022-06-08
+
+### Changed
+
+- Changed the Dependency Injection system to allow for multiple application instances.
+- Changed the way routes are created to allow for multiple route instances.
+- Disabled the SQLite adapter in tests because using SQLite in memory is a nightmare.
+
 ## [1.0.1] - 2022-05-26
 
 ### Fixed
